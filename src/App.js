@@ -24,7 +24,8 @@ class Board extends Component {
   constructor(props) {
     super(props);
     
-    this.handleShuffle = this.handleShuffle.bind(this);
+    this.handleBoardShuffle = this.handleBoardShuffle.bind(this);
+    this.handleGoalShuffle = this.handleGoalShuffle.bind(this);
 
     const colors = [
       'red-space',
@@ -42,10 +43,13 @@ class Board extends Component {
 
     spaces = this.shuffle(spaces);
 
+    let goal = this.shuffle(spaces);
+
     this.state = {
       spaces: spaces,
       blankIndex: 24,
       activeIndices: [19, 23],
+      goal: goal,
     };
   }
 
@@ -85,7 +89,7 @@ class Board extends Component {
 
   }
 
-  handleShuffle() {
+  handleBoardShuffle() {
     this.setState((prevState) => {
       let newSpaces = prevState.spaces.slice();
       let newState = {};
@@ -104,34 +108,66 @@ class Board extends Component {
     });
   }
 
+  handleGoalShuffle() {
+    this.setState((prevState) => {
+      let newGoal = prevState.goal.slice();
+      newGoal = this.shuffle(newGoal);
+
+      return {
+        goal: newGoal,
+      };
+    });
+  }
+
   shuffle(spaces) {
-    for (let i=spaces.length-2; i>0; i--) {
-      let tmp = spaces[i];
+    let newSpaces = spaces.slice();
+    for (let i=newSpaces.length-2; i>0; i--) {
+      let tmp = newSpaces[i];
       let j = Math.floor(Math.random() * (i + 1));
-      spaces[i] = spaces[j];
-      spaces[j] = tmp;
+      newSpaces[i] = newSpaces[j];
+      newSpaces[j] = tmp;
     }
-    return spaces;
+    return newSpaces;
   }
 
   render() {
-    const nums = [...Array(5).keys()];
+    const numsBoard = [...Array(5).keys()];
+    const numsGoal = [...Array(3).keys()];
 
     return (
       <div>
-        <h2>Board</h2>
-        {nums.map((n) => (
-          <div className="board-row" key={n}>
-            {nums.map((m) => (
-              <Space
-                color={this.state.spaces[n*5+m]}
-                key={n*5+m}
-                isActive={this.state.activeIndices.includes(n*5+m)}
-                onClick={() => this.handleSpaceClick(n*5+m)} />
+        <div className="left">
+          <h2>Goal</h2>
+          <div className="goal-container">
+            {numsGoal.map((n) => (
+              <div className="board-row" key={n+100}>
+                {numsGoal.map((m) => (
+                  <Space
+                    color={this.state.goal[n*3+m]}
+                    key={n*3+m+100} />
+                ))}
+              </div>
             ))}
           </div>
-        ))}
-        <button onClick={this.handleShuffle}>Shuffle</button>
+          <button onClick={this.handleGoalShuffle}>Shuffle</button>
+        </div>
+        <div className="right">
+          <h2>Board</h2>
+          <div className="board-container">
+            {numsBoard.map((n) => (
+              <div className="board-row" key={n}>
+                {numsBoard.map((m) => (
+                  <Space
+                    color={this.state.spaces[n*5+m]}
+                    key={n*5+m}
+                    isActive={this.state.activeIndices.includes(n*5+m)}
+                    onClick={() => this.handleSpaceClick(n*5+m)} />
+                ))}
+              </div>
+            ))}
+          </div>
+          <button onClick={this.handleBoardShuffle}>Shuffle</button>
+        </div>
       </div>
     )
   }

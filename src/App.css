@@ -1,3 +1,34 @@
+h1, h2 {
+  text-align: center;
+}
+
+.left {
+  float: left;
+  margin-left: 5%;
+}
+
+.right {
+  float: right;
+  margin-right: 5%;
+}
+
+.goal-container {
+  margin: 0;
+  padding: 70px;
+  background: black;
+  max-width: 210px;
+  max-height: 210px;
+  border-radius: 10px;
+  border: 1px solid black;
+}
+
+.board-container {
+  padding: 0;
+  background: black;
+  border-radius: 10px;
+  border: 3px solid black;
+}
+
 .board-row:after {
   clear: both;
   content: "";
@@ -5,8 +36,8 @@
 }
 
 .space {
-  background: #fff;
-  border: 1px solid black;
+  border: 3px solid black;
+  border-radius: 5px;
   float: left;
   font-size: 24px;
   font-weight: bold;
@@ -43,6 +74,6 @@
 }
 
 /* ACTIVE SPACE */
-.active-space {
+/*.active-space {
   border-width: 5px;
-}
+}*/
