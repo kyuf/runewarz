@@ -86,11 +86,9 @@ class Board extends Component {
         <h2>Board</h2>
         {nums.map((n) => (
           <div className="board-row" key={n}>
-            <Space color={this.state.spaces[n*5]} key={n*5} />
-            <Space color={this.state.spaces[n*5+1]} key={n*5+1} />
-            <Space color={this.state.spaces[n*5+2]} key={n*5+2} />
-            <Space color={this.state.spaces[n*5+3]} key={n*5+3} />
-            <Space color={this.state.spaces[n*5+4]} key={n*5+4} />
+            {nums.map((m) => (
+              <Space color={this.state.spaces[n*5+m]} key={n*5+m} />
+            ))}
           </div>
         ))}
         <button onClick={this.handleShuffle}>Shuffle</button>
