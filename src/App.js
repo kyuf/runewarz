@@ -24,8 +24,7 @@ class Board extends Component {
   constructor(props) {
     super(props);
     
-    this.handleBoardShuffle = this.handleBoardShuffle.bind(this);
-    this.handleGoalShuffle = this.handleGoalShuffle.bind(this);
+    this.handleNewGame = this.handleNewGame.bind(this);
 
     const colors = [
       'red-space',
@@ -89,7 +88,7 @@ class Board extends Component {
 
   }
 
-  handleBoardShuffle() {
+  handleNewGame() {
     this.setState((prevState) => {
       let newSpaces = prevState.spaces.slice();
       let newState = {};
@@ -103,19 +102,13 @@ class Board extends Component {
 
       newState['spaces'] = this.shuffle(newSpaces);
 
-      return newState;
-
-    });
-  }
-
-  handleGoalShuffle() {
-    this.setState((prevState) => {
       let newGoal = prevState.goal.slice();
       newGoal = this.shuffle(newGoal);
 
-      return {
-        goal: newGoal,
-      };
+      newState['goal'] = newGoal;
+
+      return newState;
+
     });
   }
 
@@ -149,7 +142,6 @@ class Board extends Component {
               </div>
             ))}
           </div>
-          <button onClick={this.handleGoalShuffle}>Shuffle</button>
         </div>
         <div className="right">
           <h2>Board</h2>
@@ -166,8 +158,8 @@ class Board extends Component {
               </div>
             ))}
           </div>
-          <button onClick={this.handleBoardShuffle}>Shuffle</button>
         </div>
+        <button onClick={this.handleNewGame}>New Game</button>
       </div>
     )
   }
