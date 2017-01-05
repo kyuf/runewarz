@@ -24,7 +24,6 @@ class Board extends Component {
   constructor(props) {
     super(props);
     
-    this.handleSpaceClick = this.handleSpaceClick.bind(this);
     this.handleShuffle = this.handleShuffle.bind(this);
 
     const colors = [
@@ -50,8 +49,7 @@ class Board extends Component {
     };
   }
 
-  handleSpaceClick(event) {;
-    const clickIndex = parseInt(event.target.id, 10);
+  handleSpaceClick(clickIndex) {
     const corners = {
       0: [1, 5],
       4: [3, 9],
@@ -127,10 +125,9 @@ class Board extends Component {
             {nums.map((m) => (
               <Space
                 color={this.state.spaces[n*5+m]}
-                id={n*5+m}
                 key={n*5+m}
                 isActive={this.state.activeIndices.includes(n*5+m)}
-                onClick={this.handleSpaceClick} />
+                onClick={() => this.handleSpaceClick(n*5+m)} />
             ))}
           </div>
         ))}
@@ -150,7 +147,6 @@ function Space(props) {
 
   return (
     <button
-      id={props.id}
       className={spaceClass}
       onClick={props.isActive ? props.onClick : false}></button>
   );
