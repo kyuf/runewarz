@@ -24,6 +24,7 @@ class Board extends Component {
   constructor(props) {
     super(props);
     
+    this.handleSpaceClick = this.handleSpaceClick.bind(this);
     this.handleShuffle = this.handleShuffle.bind(this);
 
     const colors = [
@@ -47,6 +48,43 @@ class Board extends Component {
       blankIndex: 24,
       activeIndices: [19, 23],
     };
+  }
+
+  handleSpaceClick(event) {;
+    const clickIndex = parseInt(event.target.id, 10);
+    const corners = {
+      0: [1, 5],
+      4: [3, 9],
+      20: [15, 21],
+      24: [19, 23],
+    };
+
+    let newSpaces = this.state.spaces.slice();
+    let newActiveIndices;
+
+    newSpaces[this.state.blankIndex] = newSpaces[clickIndex];
+    newSpaces[clickIndex] = 'blank-space';
+
+    if (clickIndex in corners) {
+      newActiveIndices = corners[clickIndex];
+    } else if (clickIndex % 5 === 0) {
+      newActiveIndices = [clickIndex-5, clickIndex+1, clickIndex+5];
+    } else if ((clickIndex+1) % 5 === 0) {
+      newActiveIndices = [clickIndex-5, clickIndex-1, clickIndex+5];
+    } else if (clickIndex < 4) {
+      newActiveIndices = [clickIndex-1, clickIndex+1, clickIndex+5];
+    } else if (clickIndex > 20) {
+      newActiveIndices = [clickIndex-5, clickIndex-1, clickIndex+1];
+    } else {
+      newActiveIndices = [clickIndex-5, clickIndex-1, clickIndex+1, clickIndex+5];
+    }
+
+    this.setState({
+      spaces: newSpaces,
+      blankIndex: clickIndex,
+      activeIndices: newActiveIndices,
+    })
+
   }
 
   handleShuffle() {
@@ -89,8 +127,10 @@ class Board extends Component {
             {nums.map((m) => (
               <Space
                 color={this.state.spaces[n*5+m]}
+                id={n*5+m}
                 key={n*5+m}
-                isActive={this.state.activeIndices.includes(n*5+m)} />
+                isActive={this.state.activeIndices.includes(n*5+m)}
+                onClick={this.handleSpaceClick} />
             ))}
           </div>
         ))}
@@ -104,14 +144,15 @@ class Board extends Component {
 function Space(props) {
   let spaceClass = 'space ' + props.color;
 
-  console.log(props.isActive)
-
   if (props.isActive) {
     spaceClass += ' active-space';
   }
 
   return (
-    <button className={spaceClass}></button>
+    <button
+      id={props.id}
+      className={spaceClass}
+      onClick={props.isActive ? props.onClick : false}></button>
   );
 }
 
