@@ -79,34 +79,26 @@ class Board extends Component {
   }
 
   render() {
-    let rows = [];
-    for (let i=0; i<5; i++) {
-      rows.push(<Row key={i} value={i} spaces={this.state.spaces} />);
-    }
+    const nums = [...Array(5).keys()];
 
     return (
       <div>
         <h2>Board</h2>
-        {rows}
+        {nums.map((n) => (
+          <div className="board-row" key={n}>
+            <Space color={this.state.spaces[n*5]} key={n*5} />
+            <Space color={this.state.spaces[n*5+1]} key={n*5+1} />
+            <Space color={this.state.spaces[n*5+2]} key={n*5+2} />
+            <Space color={this.state.spaces[n*5+3]} key={n*5+3} />
+            <Space color={this.state.spaces[n*5+4]} key={n*5+4} />
+          </div>
+        ))}
         <button onClick={this.handleShuffle}>Shuffle</button>
       </div>
     )
   }
 }
 
-function Row(props) {
-  let spaces = [];
-  for (let i=0; i<5; i++) {
-    let value = 5 * props.value + i;
-    spaces.push(<Space key={i} value={value} color={props.spaces[value]} />);
-  }
-
-  return (
-    <div className="board-row">
-      {spaces}
-    </div>
-  )
-}
 
 function Space(props) {
   let spaceClass = "space " + props.color;
