@@ -44,12 +44,28 @@ class Board extends Component {
 
     this.state = {
       spaces: spaces,
+      blankIndex: 24,
+      activeIndices: [19, 23],
     };
   }
 
   handleShuffle() {
-    const spaces = this.shuffle(this.state.spaces);
-    this.setState({spaces: spaces});
+    this.setState((prevState) => {
+      let newSpaces = prevState.spaces.slice();
+      let newState = {};
+      
+      if (newSpaces[24] !== 'blank-space') {
+        newSpaces[prevState.blankIndex] = newSpaces[24];
+        newSpaces[24] = 'blank-space';
+        newState['blankIndex'] = 24;
+        newState['activeIndices'] = [19, 23];
+      }
+
+      newState['spaces'] = this.shuffle(newSpaces);
+
+      return newState;
+
+    });
   }
 
   shuffle(spaces) {
