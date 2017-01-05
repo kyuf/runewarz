@@ -87,7 +87,10 @@ class Board extends Component {
         {nums.map((n) => (
           <div className="board-row" key={n}>
             {nums.map((m) => (
-              <Space color={this.state.spaces[n*5+m]} key={n*5+m} />
+              <Space
+                color={this.state.spaces[n*5+m]}
+                key={n*5+m}
+                isActive={this.state.activeIndices.includes(n*5+m)} />
             ))}
           </div>
         ))}
@@ -99,7 +102,13 @@ class Board extends Component {
 
 
 function Space(props) {
-  let spaceClass = "space " + props.color;
+  let spaceClass = 'space ' + props.color;
+
+  console.log(props.isActive)
+
+  if (props.isActive) {
+    spaceClass += ' active-space';
+  }
 
   return (
     <button className={spaceClass}></button>

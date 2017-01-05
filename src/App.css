@@ -41,3 +41,8 @@
 .blank-space {
   background: black;
 }
+
+/* ACTIVE SPACE */
+.active-space {
+  border-width: 5px;
+}
