@@ -1,0 +1,43 @@
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.space {
+  background: #fff;
+  border: 1px solid black;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 70px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 70px;
+}
+
+/* SPACE COLORS */
+.red-space {
+  background: red;
+}
+.green-space {
+  background: green;
+}
+.blue-space {
+  background: blue;
+}
+.yellow-space {
+  background: yellow;
+}
+.white-space {
+  background: white;
+}
+.orange-space {
+  background: orange;
+}
+.blank-space {
+  background: black;
+}
