@@ -13,14 +13,6 @@ class App extends Component {
 }
 
 class Game extends Component {
-  render() {
-    return (
-        <Board />
-    );
-  }
-}
-
-class Board extends Component {
   constructor(props) {
     super(props);
     
