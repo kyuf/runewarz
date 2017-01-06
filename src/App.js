@@ -49,6 +49,8 @@ class Board extends Component {
       blankIndex: 24,
       activeIndices: [19, 23],
       goal: goal,
+      clickCount: 0,
+      hasWon: false,
     };
   }
 
@@ -80,11 +82,13 @@ class Board extends Component {
       newActiveIndices = [clickIndex-5, clickIndex-1, clickIndex+1, clickIndex+5];
     }
 
-    this.setState({
+    this.setState((prevState) => ({
       spaces: newSpaces,
       blankIndex: clickIndex,
       activeIndices: newActiveIndices,
-    })
+      clickCount: prevState.clickCount + 1,
+      hasWon: this.winCondition(newSpaces),
+    }));
 
   }
 
@@ -107,6 +111,9 @@ class Board extends Component {
 
       newState['goal'] = newGoal;
 
+      newState['clickCount'] = 0;
+      newState['hasWon'] = false;
+
       return newState;
 
     });
@@ -123,6 +130,17 @@ class Board extends Component {
     return newSpaces;
   }
 
+  winCondition(spaces) {
+    for (let i=1; i<4; i++) {
+      for (let j=1; j<4; j++) {
+        if (spaces[i*5+j] !== this.state.goal[i*5+j]) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   render() {
     const numsBoard = [...Array(5).keys()];
     const numsGoal = [...Array(3).keys()];
@@ -136,8 +154,8 @@ class Board extends Component {
               <div className="board-row" key={n+100}>
                 {numsGoal.map((m) => (
                   <Space
-                    color={this.state.goal[n*3+m]}
-                    key={n*3+m+100} />
+                    color={this.state.goal[n*5+m+6]}
+                    key={n*5+m+106} />
                 ))}
               </div>
             ))}
@@ -160,6 +178,8 @@ class Board extends Component {
           </div>
         </div>
         <button onClick={this.handleNewGame}>New Game</button>
+        <p>Click count: {this.state.clickCount}</p>
+        <p>{this.state.hasWon ? 'WIN' : 'ALMOST'}</p>
       </div>
     )
   }
