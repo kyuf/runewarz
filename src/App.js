@@ -170,8 +170,9 @@ class Board extends Component {
                   <Space
                     color={this.state.spaces[n*5+m]}
                     key={n*5+m}
-                    isActive={this.state.activeIndices.includes(n*5+m)}
-                    onClick={() => this.handleSpaceClick(n*5+m)} />
+                    onClick={
+                      (this.state.activeIndices.includes(n*5+m) && !this.state.hasWon) ?
+                      (() => this.handleSpaceClick(n*5+m)) : false} />
                 ))}
               </div>
             ))}
@@ -196,7 +197,7 @@ function Space(props) {
   return (
     <button
       className={spaceClass}
-      onClick={props.isActive ? props.onClick : false}></button>
+      onClick={props.onClick}></button>
   );
 }
 
