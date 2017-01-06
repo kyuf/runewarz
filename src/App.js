@@ -16,6 +16,7 @@ class Game extends Component {
   constructor(props) {
     super(props);
     
+    this.handleSpaceClick = this.handleSpaceClick.bind(this);
     this.handleNewGame = this.handleNewGame.bind(this);
 
     const colors = [
@@ -134,41 +135,17 @@ class Game extends Component {
   }
 
   render() {
-    const numsBoard = [...Array(5).keys()];
-    const numsGoal = [...Array(3).keys()];
-
     return (
       <div>
         <div className="left">
-          <h2>Goal</h2>
-          <div className="goal-container">
-            {numsGoal.map((n) => (
-              <div className="board-row" key={n+100}>
-                {numsGoal.map((m) => (
-                  <Space
-                    color={this.state.goal[n*5+m+6]}
-                    key={n*5+m+106} />
-                ))}
-              </div>
-            ))}
-          </div>
+          <Goal goal={this.state.goal} />
         </div>
         <div className="right">
-          <h2>Board</h2>
-          <div className="board-container">
-            {numsBoard.map((n) => (
-              <div className="board-row" key={n}>
-                {numsBoard.map((m) => (
-                  <Space
-                    color={this.state.spaces[n*5+m]}
-                    key={n*5+m}
-                    onClick={
-                      (this.state.activeIndices.includes(n*5+m) && !this.state.hasWon) ?
-                      (() => this.handleSpaceClick(n*5+m)) : false} />
-                ))}
-              </div>
-            ))}
-          </div>
+          <Board 
+            spaces={this.state.spaces}
+            hasWon={this.state.hasWon}
+            activeIndices={this.state.activeIndices}
+            handleSpaceClick={this.handleSpaceClick} />
         </div>
         <button onClick={this.handleNewGame}>New Game</button>
         <p>Click count: {this.state.clickCount}</p>
@@ -178,6 +155,50 @@ class Game extends Component {
   }
 }
 
+function Board(props) {
+  const numsBoard = [...Array(5).keys()];
+
+  return (
+    <div>
+      <h2>Board</h2>
+      <div className="board-container">
+        {numsBoard.map((n) => (
+          <div className="board-row" key={n}>
+            {numsBoard.map((m) => (
+              <Space
+                color={props.spaces[n*5+m]}
+                key={n*5+m}
+                onClick={
+                  (props.activeIndices.includes(n*5+m) && !props.hasWon) ?
+                  (() => props.handleSpaceClick(n*5+m)) : false} />
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function Goal(props) {
+  const numsGoal = [...Array(3).keys()];
+
+  return (
+    <div>
+      <h2>Goal</h2>
+      <div className="goal-container">
+        {numsGoal.map((n) => (
+          <div className="board-row" key={n+100}>
+            {numsGoal.map((m) => (
+              <Space
+                color={props.goal[n*5+m+6]}
+                key={n*5+m+106} />
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 function Space(props) {
   let spaceClass = 'space ' + props.color;
