@@ -115,6 +115,10 @@ class Game extends Component {
   render() {
     return (
       <div>
+        <Status
+          handleNewGame={this.handleNewGame}
+          clickCount={this.state.clickCount}
+          hasWon={this.state.hasWon} />
         <div className="left">
           <Goal goal={this.state.goal} />
         </div>
@@ -124,9 +128,6 @@ class Game extends Component {
             hasWon={this.state.hasWon}
             handleSpaceClick={this.handleSpaceClick} />
         </div>
-        <button onClick={this.handleNewGame}>New Game</button>
-        <p>Click count: {this.state.clickCount}</p>
-        <p>{this.state.hasWon ? 'WIN' : 'ALMOST'}</p>
       </div>
     )
   }
@@ -232,6 +233,22 @@ function Space(props) {
       className={spaceClass}
       onClick={props.onClick}></button>
   );
+}
+
+function Status(props) {
+  return (
+    <div className="status">
+      <p>Click count: {props.clickCount}</p>
+      {props.hasWon && 
+        (
+          <div>
+            <p>YOU WIN!!</p>
+            <button onClick={props.handleNewGame}>New Game</button>
+          </div>
+        )
+      }
+    </div>
+  )
 }
 
 export default App;

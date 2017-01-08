@@ -73,7 +73,9 @@ h1, h2 {
   background: black;
 }
 
-/* ACTIVE SPACE */
-/*.active-space {
-  border-width: 5px;
-}*/
+/* STATUS */
+.status {
+  text-align: center;
+  height: 50px;
+  padding: 0;
+}
