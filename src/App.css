@@ -79,3 +79,10 @@ h1, h2 {
   height: 50px;
   padding: 0;
 }
+
+/* INSTRUCTIONS */
+.instructions {
+  margin: 0 5%;
+  padding: 20px 0 0;
+  clear: both;
+}

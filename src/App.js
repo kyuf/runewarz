@@ -5,7 +5,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <h1>Rune Warz</h1>
+        <h1>Rubik's Race</h1>
         <Game />
       </div>
     );
@@ -48,15 +48,37 @@ class Game extends Component {
   }
 
   handleSpaceClick(clickIndex) {
+    const corners = {
+      0: [1, 5],
+      4: [3, 9],
+      20: [15, 21],
+      24: [19, 23],
+    };
 
     let newSpaces = this.state.spaces.slice();
+    let newActiveIndices;
 
     newSpaces[this.state.blankIndex] = newSpaces[clickIndex];
     newSpaces[clickIndex] = 'blank-space';
 
+    if (clickIndex in corners) {
+      newActiveIndices = corners[clickIndex];
+    } else if (clickIndex % 5 === 0) {
+      newActiveIndices = [clickIndex-5, clickIndex+1, clickIndex+5];
+    } else if ((clickIndex+1) % 5 === 0) {
+      newActiveIndices = [clickIndex-5, clickIndex-1, clickIndex+5];
+    } else if (clickIndex < 4) {
+      newActiveIndices = [clickIndex-1, clickIndex+1, clickIndex+5];
+    } else if (clickIndex > 20) {
+      newActiveIndices = [clickIndex-5, clickIndex-1, clickIndex+1];
+    } else {
+      newActiveIndices = [clickIndex-5, clickIndex-1, clickIndex+1, clickIndex+5];
+    }
+
     this.setState((prevState) => ({
       spaces: newSpaces,
       blankIndex: clickIndex,
+      activeIndices: newActiveIndices,
       clickCount: prevState.clickCount + 1,
       hasWon: this.winCondition(newSpaces),
     }));
@@ -126,78 +148,37 @@ class Game extends Component {
           <Board 
             spaces={this.state.spaces}
             hasWon={this.state.hasWon}
+            activeIndices={this.state.activeIndices}
             handleSpaceClick={this.handleSpaceClick} />
         </div>
+        <Instructions />
       </div>
     )
   }
 }
 
-class Board extends Component {
-  constructor(props) {
-    super(props);
+function Board(props) {
+  const numsBoard = [...Array(5).keys()];
 
-    this.handleSpaceClick = this.handleSpaceClick.bind(this);
-
-    this.state = {
-      activeIndices: [19, 23],
-    }
-
-  }
-
-  handleSpaceClick(clickIndex) {
-    const corners = {
-      0: [1, 5],
-      4: [3, 9],
-      20: [15, 21],
-      24: [19, 23],
-    };
-
-    let newActiveIndices;
-
-    if (clickIndex in corners) {
-      newActiveIndices = corners[clickIndex];
-    } else if (clickIndex % 5 === 0) {
-      newActiveIndices = [clickIndex-5, clickIndex+1, clickIndex+5];
-    } else if ((clickIndex+1) % 5 === 0) {
-      newActiveIndices = [clickIndex-5, clickIndex-1, clickIndex+5];
-    } else if (clickIndex < 4) {
-      newActiveIndices = [clickIndex-1, clickIndex+1, clickIndex+5];
-    } else if (clickIndex > 20) {
-      newActiveIndices = [clickIndex-5, clickIndex-1, clickIndex+1];
-    } else {
-      newActiveIndices = [clickIndex-5, clickIndex-1, clickIndex+1, clickIndex+5];
-    }
-
-    this.setState({activeIndices: newActiveIndices});
-
-    this.props.handleSpaceClick(clickIndex);
-
-  }
-
-  render() {
-    const numsBoard = [...Array(5).keys()];
-
-    return (
-      <div>
-        <h2>Board</h2>
-        <div className="board-container">
-          {numsBoard.map((n) => (
-            <div className="board-row" key={n}>
-              {numsBoard.map((m) => (
-                <Space
-                  color={this.props.spaces[n*5+m]}
-                  key={n*5+m}
-                  onClick={
-                    (this.state.activeIndices.includes(n*5+m) && !this.props.hasWon) ?
-                    (() => this.handleSpaceClick(n*5+m)) : false} />
-              ))}
-            </div>
-          ))}
-        </div>
+  return (
+    <div>
+      <h2>Board</h2>
+      <div className="board-container">
+        {numsBoard.map((n) => (
+          <div className="board-row" key={n}>
+            {numsBoard.map((m) => (
+              <Space
+                color={props.spaces[n*5+m]}
+                key={n*5+m}
+                onClick={
+                  (props.activeIndices.includes(n*5+m) && !props.hasWon) ?
+                  (() => props.handleSpaceClick(n*5+m)) : false} />
+            ))}
+          </div>
+        ))}
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 function Goal(props) {
@@ -249,6 +230,39 @@ function Status(props) {
       }
     </div>
   )
+}
+
+class Instructions extends Component {
+  constructor(props) {
+    super(props);
+    this.handleToggle = this.handleToggle.bind(this);
+
+    this.state = {isVisible: false};
+  }
+
+  handleToggle() {
+    this.setState((prevState) => ({isVisible: !prevState.isVisible}));
+  }
+
+  render() {
+    return (
+      <div className="instructions">
+        <button
+          className="toggle-btn"
+          onClick={this.handleToggle}>Instuctions</button>
+
+        {this.state.isVisible &&
+          (
+            <ul>
+              <li>Move blocks on the board until the center 9 pieces match the goal</li>
+              <li>The black space on the board represents an empty space</li>
+              <li>Click a block adjacent to the empty space to move it into the empty space</li>
+            </ul>
+          )
+        }
+      </div>
+    );
+  }
 }
 
 export default App;
