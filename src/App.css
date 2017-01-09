@@ -86,3 +86,40 @@ h1, h2 {
   padding: 20px 0 0;
   clear: both;
 }
+
+.toggle-btn {
+  padding: 15px 20px;
+  background: white;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.toggle-selected {
+  background: #e5e5e5;
+}
+
+.btn-right {
+  float: right;
+  margin-left: 10px;
+}
+
+.instructions ul {
+  list-style: square;
+  margin: 10px 0;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.instructions li {
+  margin: 10px 0;
+}
+
+/* BUTTON SELECTION BORDER REMOVAL*/
+
+:focus {
+  outline: none;
+}
+
+::-moz-focus-inner {
+  border:0;
+}

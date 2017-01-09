@@ -18,6 +18,7 @@ class Game extends Component {
     
     this.handleSpaceClick = this.handleSpaceClick.bind(this);
     this.handleNewGame = this.handleNewGame.bind(this);
+    this.handleReset = this.handleReset.bind(this);
 
     const colors = [
       'red-space',
@@ -38,6 +39,7 @@ class Game extends Component {
     let goal = this.shuffle(spaces);
 
     this.state = {
+      initialSpaces: spaces,
       spaces: spaces,
       blankIndex: 24,
       activeIndices: [19, 23],
@@ -87,29 +89,37 @@ class Game extends Component {
 
   handleNewGame() {
     this.setState((prevState) => {
-      let newSpaces = prevState.spaces.slice();
-      let newState = {};
+      let oldSpaces = prevState.spaces.slice();
       
-      if (newSpaces[24] !== 'blank-space') {
-        newSpaces[prevState.blankIndex] = newSpaces[24];
-        newSpaces[24] = 'blank-space';
-        newState['blankIndex'] = 24;
-        newState['activeIndices'] = [19, 23];
+      if (oldSpaces[24] !== 'blank-space') {
+        oldSpaces[prevState.blankIndex] = oldSpaces[24];
+        oldSpaces[24] = 'blank-space';
       }
 
-      newState['spaces'] = this.shuffle(newSpaces);
+      let newSpaces = this.shuffle(oldSpaces);
+      let newGoal = this.shuffle(prevState.goal.slice());
 
-      let newGoal = prevState.goal.slice();
-      newGoal = this.shuffle(newGoal);
-
-      newState['goal'] = newGoal;
-
-      newState['clickCount'] = 0;
-      newState['hasWon'] = false;
-
-      return newState;
+      return {
+        initialSpaces: newSpaces,
+        spaces: newSpaces,
+        goal: newGoal,
+        clickCount: 0,
+        hasWon: false,
+        blankIndex: 24,
+        activeIndices: [19, 23],
+      };
 
     });
+  }
+
+  handleReset() {
+    this.setState((prevState) => ({
+      spaces: prevState.initialSpaces,
+      clickCount: 0,
+      blankIndex: 24,
+      activeIndices: [19, 23],
+      hasWon: false,
+    }));
   }
 
   shuffle(spaces) {
@@ -138,7 +148,6 @@ class Game extends Component {
     return (
       <div>
         <Status
-          handleNewGame={this.handleNewGame}
           clickCount={this.state.clickCount}
           hasWon={this.state.hasWon} />
         <div className="left">
@@ -151,7 +160,9 @@ class Game extends Component {
             activeIndices={this.state.activeIndices}
             handleSpaceClick={this.handleSpaceClick} />
         </div>
-        <Instructions />
+        <Console
+          handleReset={this.handleReset}
+          handleNewGame={this.handleNewGame} />
       </div>
     )
   }
@@ -219,12 +230,11 @@ function Space(props) {
 function Status(props) {
   return (
     <div className="status">
-      <p>Click count: {props.clickCount}</p>
+      <p>Click Count: {props.clickCount}</p>
       {props.hasWon && 
         (
           <div>
             <p>YOU WIN!!</p>
-            <button onClick={props.handleNewGame}>New Game</button>
           </div>
         )
       }
@@ -232,7 +242,7 @@ function Status(props) {
   )
 }
 
-class Instructions extends Component {
+class Console extends Component {
   constructor(props) {
     super(props);
     this.handleToggle = this.handleToggle.bind(this);
@@ -248,8 +258,14 @@ class Instructions extends Component {
     return (
       <div className="instructions">
         <button
-          className="toggle-btn"
-          onClick={this.handleToggle}>Instuctions</button>
+          className={"toggle-btn " + (this.state.isVisible ? "toggle-selected" : "")}
+          onClick={this.handleToggle}>Instructions</button>
+        <button
+          className="toggle-btn btn-right"
+          onClick={this.props.handleReset}>Reset</button>
+        <button
+          className="toggle-btn btn-right"
+          onClick={this.props.handleNewGame}>New Game</button>
 
         {this.state.isVisible &&
           (
