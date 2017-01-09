@@ -12,6 +12,11 @@ h1, h2 {
   margin-right: 5%;
 }
 
+.container {
+  max-width: 880px;
+  margin: auto;
+}
+
 .goal-container {
   margin: 0;
   padding: 70px;
@@ -119,7 +124,6 @@ h1, h2 {
 }
 
 /* BUTTON SELECTION BORDER REMOVAL*/
-
 :focus {
   outline: none;
 }
@@ -127,3 +131,22 @@ h1, h2 {
 ::-moz-focus-inner {
   border:0;
 }
+
+/* RESPONSIVE */
+/*@media (min-width: 992px) {
+  .left {
+    margin-left: 10%;
+  }
+  .right {
+    margin-right: 10%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .left {
+    margin-left: 15%;
+  }
+  .right {
+    margin-right: 15%;
+  }
+}*/

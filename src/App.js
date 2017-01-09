@@ -2,17 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 
 class App extends Component {
-  render() {
-    return (
-      <div>
-        <h1>Rubik's Race</h1>
-        <Game />
-      </div>
-    );
-  }
-}
-
-class Game extends Component {
   constructor(props) {
     super(props);
     
@@ -146,7 +135,8 @@ class Game extends Component {
 
   render() {
     return (
-      <div>
+      <div className="container">
+        <h1>Rubik's Race</h1>
         <Status
           clickCount={this.state.clickCount}
           hasWon={this.state.hasWon} />
