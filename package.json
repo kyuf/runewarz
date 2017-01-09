@@ -15,5 +15,5 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "homepage": "https://rubikrace.herokuapp.com/",
+  "homepage": "https://rubikrace.herokuapp.com/"
 }
