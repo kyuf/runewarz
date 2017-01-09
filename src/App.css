@@ -80,6 +80,10 @@ h1, h2 {
   padding: 0;
 }
 
+#win {
+  font-size: 1.2em;
+}
+
 /* INSTRUCTIONS */
 .instructions {
   margin: 0 5%;

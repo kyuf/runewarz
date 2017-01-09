@@ -231,13 +231,7 @@ function Status(props) {
   return (
     <div className="status">
       <p>Click Count: {props.clickCount}</p>
-      {props.hasWon && 
-        (
-          <div>
-            <p>YOU WIN!!</p>
-          </div>
-        )
-      }
+      {props.hasWon && <p id="win">YOU WIN!!</p>}
     </div>
   )
 }
